@@ -1,10 +1,12 @@
 package com.example.nomiatesttask.service;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("Класс ActionCounter должен ")
 class ActionCounterTest {
 
     private ActionCounter actionCounter;
@@ -15,7 +17,8 @@ class ActionCounterTest {
     }
 
     @Test
-    void shouldReturnSevenCallsOutOfTen() {
+    @DisplayName("вернуть 7")
+    void shouldReturnSeven() {
 
         actionCounter.call(1695298798);
         actionCounter.call(1695298888);
@@ -35,7 +38,8 @@ class ActionCounterTest {
     }
 
     @Test
-    void shouldReturnOneWhenOnlyLastCallInFiveMinutes() {
+    @DisplayName("вернуть один, когда только один вызов был сделан в последние 5 минут")
+    void shouldReturnOneWhenOnlyLastCallInLastFiveMinutes() {
 
         actionCounter.call(1695198798);
         actionCounter.call(1695198888);
@@ -49,8 +53,10 @@ class ActionCounterTest {
 
         assertEquals(1, result);
     }
+
     @Test
-    void shouldReturnOneWhenOnlyFirstCallNotInFiveMinutes() {
+    @DisplayName("вернуть четыре, когда все вызовы кроме первого были сделаны в последние 5 минут")
+    void shouldReturnFourWhenOnlyFirstCallNotInLastFiveMinutes() {
 
         actionCounter.call(1695198798);
 
@@ -65,9 +71,9 @@ class ActionCounterTest {
         assertEquals(4, result);
     }
 
-
     @Test
-    void shouldReturnZeroWhenNoCallsInFiveMinutes() {
+    @DisplayName("вернуть ноль, когда нет вызовов за последние 5 минут")
+    void shouldReturnZeroWhenNoCallsInLastFiveMinutes() {
 
         actionCounter.call(1695198798);
         actionCounter.call(1695198888);
@@ -80,7 +86,8 @@ class ActionCounterTest {
     }
 
     @Test
-    void shouldReturnFourWhenAllCallsInFiveMinutes() {
+    @DisplayName("вернуть 4, когда все вызовы сделаны в последние 5 минут")
+    void shouldReturnFourWhenAllCallsInLastFiveMinutes() {
 
         actionCounter.call(1695300762);
         actionCounter.call(1695300852);
