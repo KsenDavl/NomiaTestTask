@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ATMTest {
 
-    private static ATM atm;
+    private ATM atm;
 
     @BeforeEach
     void init() {
