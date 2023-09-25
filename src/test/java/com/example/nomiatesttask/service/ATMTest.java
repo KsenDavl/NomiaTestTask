@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Класс ATM должен ")
 class ATMTest {
@@ -60,5 +61,38 @@ class ATMTest {
         int[] result = atm.withdraw(300);
 
         assertArrayEquals(new int[]{0, 0, 1, 1, 0}, result);
+    }
+
+    @Test
+    @DisplayName("должен корректно отработать ряд запросов из условия задачи")
+    void shouldCorrectlyWorkTheTaskAlgorithm() {
+        atm.deposit(new int[]{0, 0, 1, 2, 1});
+        assertArrayEquals(new int[]{0, 0, 1, 0, 1}, atm.withdraw(600));
+        atm.deposit(new int[]{0, 1, 0, 1, 1});
+        assertArrayEquals(new int[]{-1}, atm.withdraw(600));
+        assertArrayEquals(new int[]{0, 1, 0, 0, 1}, atm.withdraw(550));
+        assertEquals(600, atm.getMoneyCounter().count());
+    }
+
+    @Test
+    @DisplayName("выбросить исключение, если при внесении указаны отрицательные числа")
+    void shouldThrowExceptionWhenArrayContainsNegativeNumber() {
+        assertThrows(IllegalArgumentException.class, () -> atm.deposit(new int[]{0, -10, 1, 2, 1}));
+    }
+
+    @Test
+    @DisplayName("выбросить исключение, если длина массива при внесении не равна пяти")
+    void shouldThrowExceptionWhenArrayLengthIsNotFive() {
+        assertThrows(IllegalArgumentException.class, () -> atm.deposit(new int[]{0, 10, 1}));
+        assertThrows(IllegalArgumentException.class, () -> atm.deposit(new int[]{0, 10, 1, 6, 2, 1}));
+    }
+
+    @Test
+    @DisplayName("выбросить исключение, если сумма для снятия равна 0, или отрицательна, или больше 10^9")
+    void shouldThrowExceptionWhenAmountToWithdrawIsNegativeOrZeroOrTooBig() {
+        atm.deposit(new int[]{0, 1, 0, 1, 1});
+        assertThrows(IllegalArgumentException.class, () -> atm.withdraw(0));
+        assertThrows(IllegalArgumentException.class, () -> atm.withdraw(-300));
+        assertThrows(IllegalArgumentException.class, () -> atm.withdraw(2000000000));
     }
 }

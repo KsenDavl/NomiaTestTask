@@ -19,10 +19,16 @@ public class ATM {
     }
 
     public void deposit(int[] banknotesCount) {
+        if (banknotesCount.length != 5) {
+            throw new IllegalArgumentException("The input should be an array of 5 integers");
+        }
         moneyDepositor.deposit(banknotesCount);
     }
 
     public int[] withdraw(int amount) {
+        if (amount < 1 || amount > 1000000000) {
+            throw new IllegalArgumentException("The amount to withdraw should be a positive integer less than 1000000000");
+        }
         return moneyWithdrawer.withdraw(amount);
     }
 
@@ -32,6 +38,12 @@ public class ATM {
 
     private class MoneyDepositor {
         void deposit(int[] banknotesCount) {
+            for (int i : banknotesCount) {
+                if (i < 0 || i > 1000000000) {
+                    throw new IllegalArgumentException("The amount of banknotes should be zero or a positive integer less than 1000000000");
+                }
+            }
+
             atmAvailableMoney.put(10, atmAvailableMoney.getOrDefault(10, 0) + banknotesCount[0]);
             atmAvailableMoney.put(50, atmAvailableMoney.getOrDefault(50, 0) + banknotesCount[1]);
             atmAvailableMoney.put(100, atmAvailableMoney.getOrDefault(100, 0) + banknotesCount[2]);
@@ -88,11 +100,11 @@ public class ATM {
 
             if (amount / 10 > 0) {
                 int numberOfBanknotesInAtm = atmMoneyCopy.get(10);
-                int numberOfBanknotesNeeded = amount / 100;
+                int numberOfBanknotesNeeded = amount / 10;
                 int numberOfBanknotesToWithdraw = Math.min(numberOfBanknotesInAtm, numberOfBanknotesNeeded);
-                atmMoneyCopy.put(100, numberOfBanknotesInAtm - numberOfBanknotesToWithdraw);
+                atmMoneyCopy.put(10, numberOfBanknotesInAtm - numberOfBanknotesToWithdraw);
                 banknotesToWithdraw[0] = numberOfBanknotesToWithdraw;
-                amount -= 100 * numberOfBanknotesToWithdraw;
+                amount -= 10 * numberOfBanknotesToWithdraw;
             }
 
             if (amount > 0) {
